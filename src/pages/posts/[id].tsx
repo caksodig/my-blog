@@ -33,6 +33,8 @@ const PostDetailPage: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
   const queryClient = useQueryClient();
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [commentBody, setCommentBody] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -68,16 +70,20 @@ const PostDetailPage: React.FC = () => {
 
   // Add comment mutation
   const addCommentMutation = useMutation({
-    mutationFn: ({ post_id, body }: { post_id: number; body: string }) =>
-      createComment({ post_id, body }),
+    mutationFn: ({
+      post_id,
+      body,
+      name,
+      email,
+    }: {
+      post_id: number;
+      body: string;
+      name: string;
+      email: string;
+    }) => createComment({ post_id, body, name, email }),
     onSuccess: () => {
       message.success("Comment added successfully");
       setCommentBody("");
-      // Invalidate and refetch comments
-      queryClient.invalidateQueries({ queryKey: ["comments", id] });
-    },
-    onError: (error: any) => {
-      message.error(error.response?.data?.message || "Failed to add comment");
     },
   });
 
@@ -97,6 +103,8 @@ const PostDetailPage: React.FC = () => {
       addCommentMutation.mutate({
         post_id: Number(id),
         body: commentBody,
+        name: userName,
+        email: userEmail,
       });
     } else {
       message.warning("Please enter a comment");
