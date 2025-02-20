@@ -93,6 +93,7 @@ export interface ApiErrorResponse {
 export interface PaginationParams {
   page: number;
   per_page: number;
+  limit?: number;
 }
 
 export interface Pagination {
