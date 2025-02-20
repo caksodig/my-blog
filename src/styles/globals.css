@@ -12,25 +12,25 @@
 }
 
 body {
-  @apply bg-gray-50;
+  @apply bg-gray-50 min-h-screen;
   font-family: var(--font-family);
 }
 
 /* Custom utility classes */
 .container-custom {
-  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply max-w-7xl mx-auto px-4 md:px-6 lg:px-8 xl:px-12;
 }
 
 /* Custom card styles */
 .card-hover {
-  @apply transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1;
+  @apply transition-all duration-200 ease-out hover:shadow-xl hover:-translate-y-2;
 }
 
 /* Custom button styles */
 .btn-primary {
-  @apply bg-blue-600 hover:bg-blue-700 text-white rounded-md px-4 py-2 transition-colors;
+  @apply bg-blue-600 hover:bg-blue-700 text-white rounded-md px-3 py-1 sm:px-4 sm:py-2 transition-all;
 }
 
 .btn-secondary {
-  @apply bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md px-4 py-2 transition-colors;
+  @apply bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md px-3 py-1 sm:px-4 sm:py-2 transition-all;
 }
