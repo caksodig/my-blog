@@ -120,7 +120,7 @@ const UsersPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-full mx-auto p-4">
+    <div className="max-w-full mx-auto p-4 overflow-x-auto md:overflow-visible">
       <Card className="shadow-md">
         {/* Header Users dan Search Bar */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
@@ -138,15 +138,16 @@ const UsersPage: React.FC = () => {
           />
         </div>
 
-        {/* Table Wrapper supaya bisa scroll di layar kecil */}
-        <div className="overflow-x-auto">
+        {/* Wrapper tabel agar bisa scroll di mobile */}
+        <div className="overflow-x-auto md:overflow-visible">
           <Table
             columns={columns}
             dataSource={data?.data}
             rowKey="id"
             pagination={false}
-            scroll={{ x: 800 }}
+            scroll={{ x: 600 }}
             size="small"
+            className="text-xs sm:text-sm"
           />
         </div>
 
