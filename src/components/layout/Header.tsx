@@ -71,7 +71,7 @@ const Header: React.FC = () => {
         placement="right"
         onClose={() => setMobileMenuOpen(false)}
         open={mobileMenuOpen}
-        bodyStyle={{ padding: 0 }}
+        styles={{ body: { padding: "0px" } }}
       >
         <Menu
           mode="vertical"
