@@ -120,10 +120,11 @@ const UsersPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <div className="max-w-full mx-auto p-4">
       <Card className="shadow-md">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-          <Title level={2} className="mb-4 md:mb-0">
+        {/* Header Users dan Search Bar */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+          <Title level={2} className="text-lg md:text-2xl">
             Users
           </Title>
 
@@ -132,25 +133,26 @@ const UsersPage: React.FC = () => {
             prefix={<SearchOutlined />}
             onChange={(e) => handleSearch(e.target.value)}
             value={searchText}
-            className="w-full md:w-64"
+            className="w-full sm:w-64 text-sm"
             allowClear
           />
         </div>
 
-        {/* Wrapper agar tabel bisa di-scroll di mobile */}
+        {/* Table Wrapper supaya bisa scroll di layar kecil */}
         <div className="overflow-x-auto">
           <Table
             columns={columns}
             dataSource={data?.data}
             rowKey="id"
             pagination={false}
-            scroll={{ x: "100%" }}
+            scroll={{ x: 800 }}
             size="small"
           />
         </div>
 
+        {/* Pagination */}
         {data?.meta?.pagination && (
-          <div className="mt-4">
+          <div className="mt-4 flex justify-center">
             <Pagination
               current={page}
               total={data.meta.pagination.total}
