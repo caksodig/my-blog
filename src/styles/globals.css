@@ -18,7 +18,7 @@ body {
 
 /* Custom utility classes */
 .container-custom {
-  @apply mx-auto px-6 lg:px-8;
+  @apply mx-auto px-6 md:px-8 lg:px-12;
 }
 
 /* Custom card styles */
