@@ -33,7 +33,10 @@ export const getPost = async (id: number): Promise<IPost> => {
 
 // Create a new post
 export const createPost = async (postData: IPostInput): Promise<IPost> => {
-  const response = await api.post("/posts", postData);
+  const response = await api.post("/posts", {
+    ...postData,
+    user_id: postData.user_id,
+  });
   return response.data;
 };
 

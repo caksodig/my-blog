@@ -1,64 +1,93 @@
-import React from "react";
-import { useRouter } from "next/router";
-import { useMutation } from "@tanstack/react-query";
-import { Typography, Card, message } from "antd";
-import { ArrowLeftOutlined } from "@ant-design/icons";
-import Link from "next/link";
-import Layout from "@/components/layout/Layout";
-import PostForm from "@/components/posts/PostForm";
+import React, { useState, useEffect } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { Select, Input, Button, message } from "antd";
+import { getAllUsers } from "@/services/users";
 import { createPost } from "@/services/posts";
-import { IPostInput } from "@/types/posts";
-import { Post } from "@/types/posts";
 
-const { Title } = Typography;
+const { Option } = Select;
 
-const CreatePostPage: React.FC = () => {
-  const router = useRouter();
+const CreatePost = () => {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [userId, setUserId] = useState("");
 
-  const createPostMutation = useMutation({
-    mutationFn: (postData: IPostInput) => createPost(postData),
+  // Fetch users from API
+  const { data: users, isLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: getAllUsers,
+  });
+
+  // Mutation untuk create post
+  const mutation = useMutation({
+    mutationFn: createPost,
     onSuccess: () => {
-      message.success("Post created successfully");
-      router.push("/");
+      message.success("Post created successfully!");
+      setTitle("");
+      setBody("");
+      setUserId("");
     },
-    onError: (error: any) => {
-      const errorMessages = error.response?.data?.data || [];
-      if (errorMessages.length > 0) {
-        errorMessages.forEach((err: any) => {
-          message.error(`${err.field}: ${err.message}`);
-        });
-      } else {
-        message.error(error.response?.data?.message || "Failed to create post");
-      }
+    onError: () => {
+      message.error("Failed to create post.");
     },
   });
 
-  const handleSubmit = (values: IPostInput) => {
-    createPostMutation.mutate(values);
+  const handleCreatePost = () => {
+    if (!userId) {
+      message.warning("Please select an author!");
+      return;
+    }
+
+    mutation.mutate({
+      user_id: parseInt(userId, 10),
+      title,
+      body,
+    });
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-4">
-      <Link href="/">
-        <span className="flex items-center text-blue-500 hover:text-blue-700 mb-4">
-          <ArrowLeftOutlined className="mr-2" />
-          Back to Posts
-        </span>
-      </Link>
+    <div className="max-w-md mx-auto p-4 border rounded-md shadow-md">
+      <h2 className="text-xl font-semibold mb-4">Create New Post</h2>
 
-      <Card className="shadow-md">
-        <Title level={2} className="mb-6">
-          Create New Post
-        </Title>
-        <PostForm
-          onSubmit={handleSubmit}
-          loading={createPostMutation.isPending}
-          initialValues={undefined}
-          submitText="create Post"
-        />
-      </Card>
+      <Select
+        value={userId}
+        onChange={setUserId}
+        placeholder="Select an author"
+        className="w-full mb-2"
+        loading={isLoading}
+      >
+        {users?.map((user) => (
+          <Option key={user.id} value={user.id}>
+            {user.name} ({user.email})
+          </Option>
+        ))}
+      </Select>
+
+      <Input
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Title"
+        className="w-full mb-2"
+      />
+
+      <Input.TextArea
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+        placeholder="Body"
+        rows={4}
+        className="w-full mb-2"
+      />
+
+      {/* Submit Button */}
+      <Button
+        type="primary"
+        onClick={handleCreatePost}
+        loading={mutation.isPending}
+        className="w-full"
+      >
+        Create Post
+      </Button>
     </div>
   );
 };
 
-export default CreatePostPage;
+export default CreatePost;

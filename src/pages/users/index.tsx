@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Card, Table, Tag, Button, Typography, Input, Space } from "antd";
+import { Card, Table, Tag, Button, Typography, Input } from "antd";
 import { SearchOutlined, UserOutlined, EyeOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import type { ColumnsType } from "antd/es/table";
 
-import Layout from "@/components/layout/Layout";
 import Pagination from "@/components/common/Pagination";
 import Loading from "@/components/common/Loading";
 import Error from "@/components/common/Error";
@@ -27,8 +26,6 @@ const UsersPage: React.FC = () => {
 
   const handleSearch = (value: string) => {
     setSearchText(value);
-    // In a real app with a backend that supports search, we would include the search term in the API call
-    // For now, we'll just refetch the current page
     refetch();
   };
 
@@ -38,7 +35,7 @@ const UsersPage: React.FC = () => {
 
   const handleShowSizeChange = (_: number, size: number) => {
     setPageSize(size);
-    setPage(1); // Reset to first page when changing page size
+    setPage(1);
   };
 
   // Table columns definition
@@ -140,14 +137,17 @@ const UsersPage: React.FC = () => {
           />
         </div>
 
-        <Table
-          columns={columns}
-          dataSource={data?.data}
-          rowKey="id"
-          pagination={false}
-          scroll={{ x: "max-content" }}
-          size="middle"
-        />
+        {/* Wrapper agar tabel bisa di-scroll di mobile */}
+        <div className="overflow-x-auto">
+          <Table
+            columns={columns}
+            dataSource={data?.data}
+            rowKey="id"
+            pagination={false}
+            scroll={{ x: "100%" }}
+            size="small"
+          />
+        </div>
 
         {data?.meta?.pagination && (
           <div className="mt-4">
